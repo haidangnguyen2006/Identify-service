@@ -1,9 +1,11 @@
 /* (C)2025 */
 package com.bill.identity_service.service;
 
+import com.bill.identity_service.constant.PredefinedRole;
 import com.bill.identity_service.dto.request.UserCreationRequest;
 import com.bill.identity_service.dto.request.UserUpdateRequest;
 import com.bill.identity_service.dto.response.UserResponse;
+import com.bill.identity_service.entity.Role;
 import com.bill.identity_service.entity.User;
 import com.bill.identity_service.enums.RoleEnum;
 import com.bill.identity_service.exception.AppException;
@@ -17,6 +19,7 @@ import java.util.Set;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -34,17 +37,20 @@ public class UserService {
 
     public UserResponse createUser(UserCreationRequest request) {
 
-        if (userRepository.existsByUsername(request.getUsername())) {
-            throw new AppException(ErrorCode.USER_EXISTED);
-        }
         User user = userMapper.toUser(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        Set<String> roles = new HashSet<>();
-        roles.add(RoleEnum.USER.name());
-        // user.setRoles(roles);
+        HashSet<Role> roles = new HashSet<>();
+        roleRepository.findById(PredefinedRole.USER_ROLE).ifPresent(roles::add);
+        user.setRoles(roles);
+        try{
+            user=userRepository.save(user);
 
-        return userMapper.toUserResponse(userRepository.save(user));
+        } catch (DataIntegrityViolationException e) {
+            throw new AppException(ErrorCode.USER_EXISTED);
+        }
+
+        return userMapper.toUserResponse(user);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
