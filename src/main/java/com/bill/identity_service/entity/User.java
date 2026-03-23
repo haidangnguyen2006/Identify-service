@@ -19,11 +19,18 @@ public class User {
     @GeneratedValue(strategy = GenerationType.UUID)
     String id;
 
+    @Column(name="username",unique = true)
     String username;
     String password;
     String firstname;
     String lastname;
     LocalDate dob;
 
-    @ManyToMany Set<Role> roles;
+    @ManyToMany
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_name")
+    )
+    Set<Role> roles;
 }
