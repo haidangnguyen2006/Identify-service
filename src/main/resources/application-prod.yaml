@@ -1,0 +1,13 @@
+
+spring:
+  datasource:
+    url: "jdbc:postgresql://localhost:5432/identity_service"
+    driverClassName: "org.postgresql.Driver"
+    username: postgres
+    password: 123
+  jpa:
+    hibernate:
+      ddl-auto: update
+jwt:
+  valid-duration : 20 #in seconds
+  refreshable-duration : 40 #in seconds
