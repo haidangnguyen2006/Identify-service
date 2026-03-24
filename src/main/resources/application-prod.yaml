@@ -1,13 +1,15 @@
 
 spring:
   datasource:
-    url: "jdbc:postgresql://localhost:5432/identity_service"
+    url: "${DB_URL:jdbc:postgresql://postgres-db:5432/identity_service}"
     driverClassName: "org.postgresql.Driver"
-    username: postgres
-    password: 123
+    username: "${DB_USERNAME:postgres}"
+    password: "${DB_PASSWORD:123}"
   jpa:
     hibernate:
       ddl-auto: update
+
 jwt:
-  valid-duration : 20 #in seconds
-  refreshable-duration : 40 #in seconds
+  signerKey: "${JWT_SIGNERKEY}"
+  valid-duration: 20
+  refreshable-duration: 40
