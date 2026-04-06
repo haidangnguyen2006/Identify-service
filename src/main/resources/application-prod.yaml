@@ -8,6 +8,12 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
 
 jwt:
   signerKey: "${JWT_SIGNERKEY}"
