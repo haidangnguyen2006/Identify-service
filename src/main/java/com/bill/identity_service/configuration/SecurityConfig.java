@@ -28,7 +28,8 @@ import java.util.List;
 public class SecurityConfig {
 
     private final String[] PUBLIC_ENDPOINT = {
-        "/auth/token", "/users", "/auth/introspect", "/auth/logout", "/auth/refresh"
+            "/auth/token", "/users", "/auth/introspect", "/auth/logout", "/auth/refresh",
+            "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html"
     };
 
     @Autowired
