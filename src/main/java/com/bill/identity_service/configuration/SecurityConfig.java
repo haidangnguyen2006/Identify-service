@@ -27,9 +27,15 @@ import java.util.List;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    private final String[] PUBLIC_ENDPOINT = {
-            "/auth/token", "/users", "/auth/introspect", "/auth/logout", "/auth/refresh",
-            "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html"
+    private final String[] PUBLIC_ENDPOINTS = {
+            "/auth/token", "/users", "/auth/introspect", "/auth/logout", "/auth/refresh"
+    };
+
+    private final String[] SWAGGER_ENDPOINTS = {
+            "/v3/api-docs",
+            "/v3/api-docs/**",
+            "/swagger-ui/**",
+            "/swagger-ui.html"
     };
 
     @Autowired
@@ -48,7 +54,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-                        .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINT).permitAll()
+                        .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS).permitAll()
+                        .requestMatchers(SWAGGER_ENDPOINTS).permitAll()
 
                         .anyRequest().authenticated()
                 );

@@ -6,6 +6,8 @@ import com.bill.identity_service.dto.request.UserCreationRequest;
 import com.bill.identity_service.dto.request.UserUpdateRequest;
 import com.bill.identity_service.dto.response.UserResponse;
 import com.bill.identity_service.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.AccessLevel;
@@ -17,9 +19,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/users")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Tag(name = "User Controller", description = "These API are provided to manage user") // Tên nhóm API
 public class UserController {
     UserService userService;
 
+    @Operation(summary = "Create a new user", description = "This api is used to create a new user in the system")
     @PostMapping
     ApiRespone<UserResponse> createUser(@RequestBody @Valid UserCreationRequest request) {
         ApiRespone<UserResponse> apiRespone = new ApiRespone<>();
