@@ -13,14 +13,15 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@MappedSuperclass
-@EntityListeners(AuditingEntityListener.class)
+@MappedSuperclass //This annotation is maked the superclass to child class to inherit the properties to DB
+@EntityListeners(AuditingEntityListener.class)//Register Listener to automatically track by spring
 public abstract class BaseEntity {
 
     @CreatedDate
-    @Column(updatable = false)
+    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
     @LastModifiedDate
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 }

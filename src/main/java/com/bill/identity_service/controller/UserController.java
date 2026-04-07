@@ -13,8 +13,10 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
@@ -34,7 +36,8 @@ public class UserController {
 
     @GetMapping
     ApiRespone<List<UserResponse>> getUsers() {
-
+        List<UserResponse> users=userService.getUsers();;
+        log.info("Get user successfully, Users size: {}", users.size());
         return ApiRespone.<List<UserResponse>>builder().result(userService.getUsers()).build();
     }
 
