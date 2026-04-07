@@ -175,7 +175,7 @@ public class AuthenticationService {
                         .expirationTime(
                                 new Date(
                                         Instant.now()
-                                                .plus(VALID_DURATION, ChronoUnit.SECONDS)
+                                                .plus(VALID_DURATION, ChronoUnit.MINUTES)
                                                 .toEpochMilli()))
                         .claim("scope", buildScope(user))
                         .jwtID(UUID.randomUUID().toString())

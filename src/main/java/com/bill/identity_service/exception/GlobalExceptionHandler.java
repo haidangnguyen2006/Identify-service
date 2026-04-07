@@ -22,6 +22,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = Exception.class)
     ResponseEntity<ApiRespone> handlingException(Exception exception) {
         ErrorCode errorCode = ErrorCode.UNCATEGORIZED;
+        log.error("🔴 LỖI NGẦM TRONG HỆ THỐNG: ", exception);
         return ResponseEntity.status(errorCode.getStatusCode())
                 .body(
                         ApiRespone.builder()

@@ -15,7 +15,7 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Table(name = "InvalidatedToken")
-public class InvalidatedToken {
+public class InvalidatedToken extends BaseEntity {
     @Id String id;
 
     Date exp;
