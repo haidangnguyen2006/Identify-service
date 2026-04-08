@@ -18,6 +18,8 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -30,6 +32,7 @@ public class RoleService {
     UserRepository userRepository;
     PermissionRepository permissionRepository;
 
+    @CacheEvict(value = "roles", allEntries = true)
     public RoleRespone create(RoleRequest request) {
         if (roleRepository.existsById(request.getName())) {
             throw new AppException(ErrorCode.ROLE_EXISTED);
@@ -61,12 +64,14 @@ public class RoleService {
 
         return roleMapper.toRoleRespone(role);
     }
-
+    @Cacheable(value = "roles", key="'all'")
     public List<RoleRespone> getAll() {
+        log.info("🔴 Đang truy vấn Database để lấy danh sách Roles...");
+
         List<Role> roles = roleRepository.findAll();
         return roleMapper.toRoleRespone(roles);
     }
-
+    @CacheEvict(value = "roles", allEntries = true)
     public void delete(String name) {
         log.warn("Vao duoc ham delete");
         var role =

@@ -14,6 +14,8 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -24,6 +26,9 @@ public class PermissionService {
     PermissionRepository permissionRepository;
     PermissionMapper permissionMapper;
 
+    // 1. TẠO MỚI: Xóa toàn bộ cache cũ đi (vì danh sách đã bị thay đổi)
+    // allEntries = true nghĩa là xóa sạch mọi key nằm trong thư mục "permissions" của Redis
+    @CacheEvict(value="permissions",allEntries = true)
     public PermissionRespone create(PermissionRequest request) {
         Permission permission = permissionMapper.toPermission(request);
         log.warn(permission.getName() + "-" + permission.getDescription());
@@ -31,10 +36,13 @@ public class PermissionService {
         return permissionMapper.toPermissionRespone(permission);
     }
 
+    @Cacheable(value = "permissions", key="'all'")
     public List<PermissionRespone> getAll() {
+        log.info("🔴 Đang truy vấn Database để lấy danh sách Permissions...");
         return permissionMapper.toPermissionRespone(permissionRepository.findAll());
     }
 
+    @CacheEvict(value = "permissions", allEntries = true)
     public void delete(String permission) {
         permissionRepository.deleteById(permission);
     }
