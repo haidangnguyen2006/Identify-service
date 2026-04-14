@@ -41,7 +41,9 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
 
         HashSet<Role> roles = new HashSet<>();
-        roleRepository.findById(PredefinedRole.USER_ROLE).ifPresent(roles::add);
+        Role defaultRole= roleRepository.findById(PredefinedRole.USER_ROLE)
+                        .orElseThrow(()-> new AppException(ErrorCode. ROLE_UN_EXISTED));
+        roles.add(defaultRole);
         user.setRoles(roles);
         try{
             user=userRepository.save(user);
